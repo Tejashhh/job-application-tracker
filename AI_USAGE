@@ -1,0 +1,19 @@
+# AI Usage Documentation
+## Tools Used
+- ChatGPT (GPT-4) for Flask routes and SQL queries
+- Claude for debugging and code review
+## Key Prompts
+1. "Write a Flask route to display all jobs with company names using JOIN."
+2. "Debug this error: MySQL connector not finding database."
+3. "Create a function to calculate skill match percentage."
+## What Worked Well
+- AI-generated the basic CRUD routes quickly
+- Excellent at explaining error messages
+## What I Modified
+- Changed variable names to match my schema
+- Added input validation, AI didn't include
+- Fixed SQL to use my actual table names
+## Lessons Learned
+- Always test AI code - it often has minor errors
+- AI is great for boilerplate, but needs customization
+- Asking for explanations helps me learn
