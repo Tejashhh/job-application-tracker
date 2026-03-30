@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="bi bi-send"></i> 
+                    {% if application %}
+                        Edit Application
+                    {% else %}
+                        Add New Application
+                    {% endif %}
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <!-- Job Selection -->
+                    <div class="mb-3">
+                        <label for="job_id" class="form-label">Job *</label>
+                        <select class="form-select" id="job_id" name="job_id" required>
+                            <option value="">Select a job...</option>
+                            {% for job in jobs %}
+                                <option value="{{ job.job_id }}" 
+                                    {% if application and application.job_id == job.job_id %}selected{% endif %}>
+                                    {{ job.job_title }} at {{ job.company_name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <!-- Application Date -->
+                    <div class="mb-3">
+                        <label for="application_date" class="form-label">Application Date *</label>
+                        <input type="date" class="form-control" id="application_date" name="application_date" 
+                               value="{{ application.application_date if application else '' }}" required>
+                    </div>
+                    
+                    <!-- Status -->
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status *</label>
+                        <select class="form-select" id="status" name="status" required>
+                            <option value="Applied" {% if application and application.status == 'Applied' %}selected{% endif %}>Applied</option>
+                            <option value="Screening" {% if application and application.status == 'Screening' %}selected{% endif %}>Screening</option>
+                            <option value="Interview" {% if application and application.status == 'Interview' %}selected{% endif %}>Interview</option>
+                            <option value="Offer" {% if application and application.status == 'Offer' %}selected{% endif %}>Offer</option>
+                            <option value="Rejected" {% if application and application.status == 'Rejected' %}selected{% endif %}>Rejected</option>
+                            <option value="Withdrawn" {% if application and application.status == 'Withdrawn' %}selected{% endif %}>Withdrawn</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Resume Version -->
+                    <div class="mb-3">
+                        <label for="resume_version" class="form-label">Resume Version</label>
+                        <input type="text" class="form-control" id="resume_version" name="resume_version" 
+                               value="{{ application.resume_version if application else '' }}" 
+                               placeholder="e.g., v2.0, 2025_tech_resume.pdf">
+                    </div>
+                    
+                    <!-- Cover Letter Sent -->
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="cover_letter_sent" name="cover_letter_sent" 
+                                   {% if application and application.cover_letter_sent %}checked{% endif %}>
+                            <label class="form-check-label" for="cover_letter_sent">
+                                Cover letter sent
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Interview Data (JSON) -->
+                    <div class="mb-3">
+                        <label for="interview_data" class="form-label">Interview Data (Optional)</label>
+                        <textarea class="form-control" id="interview_data" name="interview_data" rows="4" 
+                                  placeholder='Enter interview details as JSON format:&#10;{"date": "2025-02-01", "round": "Technical", "interviewer": "John Doe", "notes": "Went well"}' 
+                                  style="font-family: monospace;">{% if application and application.interview_data and application.interview_data != 'null' %}{{ application.interview_data }}{% endif %}</textarea>
+                        <small class="text-muted">Optional: Store interview details as JSON</small>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="/applications" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i> Save Application
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

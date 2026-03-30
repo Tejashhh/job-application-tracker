@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="bi bi-briefcase"></i> 
+                    {% if job %}
+                        Edit Job
+                    {% else %}
+                        Add New Job
+                    {% endif %}
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <!-- Company Selection -->
+                    <div class="mb-3">
+                        <label for="company_id" class="form-label">Company *</label>
+                        <select class="form-select" id="company_id" name="company_id" required>
+                            <option value="">Select a company...</option>
+                            {% for company in companies %}
+                                <option value="{{ company.company_id }}" 
+                                    {% if job and job.company_id == company.company_id %}selected{% endif %}>
+                                    {{ company.company_name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <!-- Job Title -->
+                    <div class="mb-3">
+                        <label for="job_title" class="form-label">Job Title *</label>
+                        <input type="text" class="form-control" id="job_title" name="job_title" 
+                               value="{{ job.job_title if job else '' }}" required>
+                    </div>
+                    
+                    <!-- Job Type -->
+                    <div class="mb-3">
+                        <label for="job_type" class="form-label">Job Type *</label>
+                        <select class="form-select" id="job_type" name="job_type" required>
+                            <option value="Full-time" {% if job and job.job_type == 'Full-time' %}selected{% endif %}>Full-time</option>
+                            <option value="Part-time" {% if job and job.job_type == 'Part-time' %}selected{% endif %}>Part-time</option>
+                            <option value="Contract" {% if job and job.job_type == 'Contract' %}selected{% endif %}>Contract</option>
+                            <option value="Internship" {% if job and job.job_type == 'Internship' %}selected{% endif %}>Internship</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Salary Range -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="salary_min" class="form-label">Minimum Salary ($)</label>
+                            <input type="number" class="form-control" id="salary_min" name="salary_min" 
+                                   value="{{ job.salary_min if job else '' }}" placeholder="e.g., 50000">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="salary_max" class="form-label">Maximum Salary ($)</label>
+                            <input type="number" class="form-control" id="salary_max" name="salary_max" 
+                                   value="{{ job.salary_max if job else '' }}" placeholder="e.g., 80000">
+                        </div>
+                    </div>
+                    
+                    <!-- Job URL -->
+                    <div class="mb-3">
+                        <label for="job_url" class="form-label">Job Posting URL</label>
+                        <input type="url" class="form-control" id="job_url" name="job_url" 
+                               value="{{ job.job_url if job else '' }}" placeholder="https://...">
+                    </div>
+                    
+                    <!-- Date Posted -->
+                    <div class="mb-3">
+                        <label for="date_posted" class="form-label">Date Posted</label>
+                        <input type="date" class="form-control" id="date_posted" name="date_posted" 
+                               value="{{ job.date_posted if job else '' }}">
+                    </div>
+                    
+                    <!-- Requirements (Skills) -->
+                    <div class="mb-3">
+                        <label for="requirements" class="form-label">Requirements/Skills</label>
+                        <textarea class="form-control" id="requirements" name="requirements[]" rows="4" 
+                                  placeholder="Enter each skill on a new line or comma-separated&#10;Example:&#10;Python&#10;SQL&#10;Flask">{% if job and job.requirements_list %}{{ job.requirements_list|join('\n') }}{% endif %}</textarea>
+                        <small class="text-muted">Enter each skill on a new line or separate with commas</small>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="/jobs" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i> Save Job
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Optional: Convert textarea input to array format before submission
+    document.querySelector('form').addEventListener('submit', function(e) {
+        let textarea = document.getElementById('requirements');
+        if (textarea.value) {
+            // Split by newline or comma
+            let skills = textarea.value.split(/[\n,]+/).map(s => s.trim()).filter(s => s);
+            // Create hidden inputs for each skill
+            skills.forEach(skill => {
+                let input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'requirements[]';
+                input.value = skill;
+                this.appendChild(input);
+            });
+            // Disable the original textarea
+            textarea.disabled = true;
+        }
+    });
+</script>
+{% endblock %}

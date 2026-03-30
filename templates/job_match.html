@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="bi bi-graph-up"></i> Your Skills
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="skills" class="form-label">Enter your skills (comma-separated):</label>
+                        <textarea class="form-control" id="skills" name="skills" rows="6" 
+                                  placeholder="Example:&#10;Python, SQL, Flask, JavaScript, React, AWS">{{ user_skills }}</textarea>
+                        <small class="text-muted mt-2 d-block">
+                            <i class="bi bi-info-circle"></i> Separate skills with commas (e.g., Python, SQL, Flask)
+                        </small>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-search"></i> Find Matching Jobs
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Tips Card -->
+        <div class="card mt-3">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0"><i class="bi bi-lightbulb"></i> Tips</h5>
+            </div>
+            <div class="card-body">
+                <ul class="mb-0">
+                    <li>Enter skills exactly as they appear in job requirements</li>
+                    <li>Use commas to separate multiple skills</li>
+                    <li>Case-insensitive matching (Python = python)</li>
+                    <li>Higher match percentage = better fit</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">
+                    <i class="bi bi-trophy"></i> Matching Jobs
+                    {% if matches %}
+                    <span class="badge bg-light text-dark ms-2">{{ matches|length }} jobs found</span>
+                    {% endif %}
+                </h4>
+            </div>
+            <div class="card-body">
+                {% if matches %}
+                    {% for match in matches %}
+                    <div class="border-bottom mb-3 pb-3">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <h5 class="mb-1">
+                                    {{ match.job_title }}
+                                    <small class="text-muted fs-6">at {{ match.company_name }}</small>
+                                </h5>
+                                <div class="mb-2">
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar bg-{{ 'success' if match.match_percentage >= 70 else 'warning' if match.match_percentage >= 40 else 'danger' }}" 
+                                             role="progressbar" 
+                                             style="width: {{ match.match_percentage }}%;" 
+                                             aria-valuenow="{{ match.match_percentage }}" 
+                                             aria-valuemin="0" 
+                                             aria-valuemax="100">
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="mb-2">
+                                    <span class="badge bg-{{ 'success' if match.match_percentage >= 70 else 'warning' if match.match_percentage >= 40 else 'danger' }} fs-6">
+                                        {{ match.match_percentage }}% Match
+                                    </span>
+                                    <span class="text-muted ms-2">
+                                        {{ match.matched_skills|length }} of {{ match.total_skills }} skills matched
+                                    </span>
+                                </p>
+                                
+                                {% if match.matched_skills %}
+                                <div class="mb-2">
+                                    <span class="text-success">
+                                        <i class="bi bi-check-circle-fill"></i> <strong>Matched:</strong>
+                                    </span>
+                                    {% for skill in match.matched_skills %}
+                                    <span class="badge bg-success me-1">{{ skill }}</span>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                                
+                                {% if match.missing_skills %}
+                                <div>
+                                    <span class="text-danger">
+                                        <i class="bi bi-x-circle-fill"></i> <strong>Missing:</strong>
+                                    </span>
+                                    {% for skill in match.missing_skills %}
+                                    <span class="badge bg-danger me-1">{{ skill }}</span>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="ms-3">
+                                <a href="/jobs/edit/{{ match.job_id }}" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-eye"></i> View Job
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center py-5">
+                        {% if user_skills %}
+                            <i class="bi bi-emoji-frown fs-1 text-muted"></i>
+                            <p class="text-muted mt-3">No matching jobs found. Try different skills or check if jobs have requirements listed.</p>
+                        {% else %}
+                            <i class="bi bi-arrow-up fs-1 text-muted"></i>
+                            <p class="text-muted mt-3">Enter your skills above to see matching jobs.</p>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="bi bi-person-lines-fill"></i> 
+                    {% if contact %}
+                        Edit Contact
+                    {% else %}
+                        Add New Contact
+                    {% endif %}
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <!-- Company Selection -->
+                    <div class="mb-3">
+                        <label for="company_id" class="form-label">Company *</label>
+                        <select class="form-select" id="company_id" name="company_id" required>
+                            <option value="">Select a company...</option>
+                            {% for company in companies %}
+                                <option value="{{ company.company_id }}" 
+                                    {% if contact and contact.company_id == company.company_id %}selected{% endif %}>
+                                    {{ company.company_name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <!-- First Name -->
+                    <div class="mb-3">
+                        <label for="first_name" class="form-label">First Name *</label>
+                        <input type="text" class="form-control" id="first_name" name="first_name" 
+                               value="{{ contact.first_name if contact else '' }}" required>
+                    </div>
+                    
+                    <!-- Last Name -->
+                    <div class="mb-3">
+                        <label for="last_name" class="form-label">Last Name *</label>
+                        <input type="text" class="form-control" id="last_name" name="last_name" 
+                               value="{{ contact.last_name if contact else '' }}" required>
+                    </div>
+                    
+                    <!-- Job Title -->
+                    <div class="mb-3">
+                        <label for="job_title" class="form-label">Job Title</label>
+                        <input type="text" class="form-control" id="job_title" name="job_title" 
+                               value="{{ contact.job_title if contact else '' }}" 
+                               placeholder="e.g., HR Manager, Technical Recruiter">
+                    </div>
+                    
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" 
+                               value="{{ contact.email if contact else '' }}" 
+                               placeholder="name@company.com">
+                    </div>
+                    
+                    <!-- Phone -->
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Phone</label>
+                        <input type="tel" class="form-control" id="phone" name="phone" 
+                               value="{{ contact.phone if contact else '' }}" 
+                               placeholder="(555) 123-4567">
+                    </div>
+                    
+                    <!-- LinkedIn URL -->
+                    <div class="mb-3">
+                        <label for="linkedin_url" class="form-label">LinkedIn Profile URL</label>
+                        <input type="url" class="form-control" id="linkedin_url" name="linkedin_url" 
+                               value="{{ contact.linkedin_url if contact else '' }}" 
+                               placeholder="https://linkedin.com/in/username">
+                    </div>
+                    
+                    <!-- Notes -->
+                    <div class="mb-3">
+                        <label for="notes" class="form-label">Notes</label>
+                        <textarea class="form-control" id="notes" name="notes" rows="4" 
+                                  placeholder="Additional notes about this contact...">{{ contact.notes if contact else '' }}</textarea>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="/contacts" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i> Save Contact
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
