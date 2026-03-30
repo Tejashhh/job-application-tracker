@@ -1,19 +1,22 @@
 # AI Usage Documentation
 ## Tools Used
-- ChatGPT (GPT-4) for Flask routes and SQL queries
-- Claude for debugging and code review
+- ChatGPT for making Flask routes, html templates, css styles.
+- Gemini for debugging and code review, SQL queries for job match, UI chnages
+
 ## Key Prompts
-1. "Write a Flask route to display all jobs with company names using JOIN."
-2. "Debug this error: MySQL connector not finding database."
-3. "Create a function to calculate skill match percentage."
+1. "Write a Flask CURD route for companies table with mySQL database connection"
+2. "Create an HTML templates for the porject with the requirements that uses css styling"
+3. "How to add requirements to job on mySQL so that i can create a job match feature for the project"
 ## What Worked Well
-- AI-generated the basic CRUD routes quickly
-- Excellent at explaining error messages
+- AI-generated the basic CRUD routes and html templates quickly
+- Able to copy and paste erorr messages and be able to quicky debugg and fix the application.
 ## What I Modified
-- Changed variable names to match my schema
-- Added input validation, AI didn't include
-- Fixed SQL to use my actual table names
+- Changed the template provided by the AI to input the variables from my database
+- Added the required tables for the job match
+- Fixed any errors that I ran into from mistakes in the AI provided templates
 ## Lessons Learned
-- Always test AI code - it often has minor errors
-- AI is great for boilerplate, but needs customization
-- Asking for explanations helps me learn
+- AI is very helpful and faster than any human ever.
+- AI work need to be double checked as it also has errors very often
+- AI responses are very inconsistant, you have to moitor the output and really pay attention to what you use ai for.
+- You are responible of setting up with your own varaible. AI is a good guider, you still need to put the finishing touches.
+
