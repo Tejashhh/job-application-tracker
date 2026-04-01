@@ -7,6 +7,7 @@
 1. "Write a Flask CURD route for companies table with mySQL database connection"
 2. "Create an HTML templates for the porject with the requirements that uses css styling"
 3. "How to add requirements to job on mySQL so that i can create a job match feature for the project"
+4. "Create a template html for my dashboard for the job tracker application" 
 ## What Worked Well
 - AI-generated the basic CRUD routes and html templates quickly
 - Able to copy and paste erorr messages and be able to quicky debugg and fix the application.
